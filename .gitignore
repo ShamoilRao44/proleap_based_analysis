@@ -28,6 +28,7 @@ Thumbs.db
 desktop.ini
 
 # --- Tool outputs (generated from client source code, do not push) ---
+analysis_out/
 copybooks/
 ast_output/
 copybook_report.json
