@@ -172,6 +172,8 @@ Online and batch programs therefore meet at the same dataset node. That is how h
 
 ## Stage 4: Module detection, bundles and conversion order
 
+Input from the activity flow: [STEP4B_BUILD_PLAN.md](STEP4B_BUILD_PLAN.md), [FLOW_SCHEMA.md](FLOW_SCHEMA.md). Process roots (`main_entry_points.json`) are the module seeds; levels give the order within a process.
+
 This is the core of the plan. Simply following every edge from an entry point does not work: in CardDemo the main menu XCTLs to almost every screen, so one closure would contain the whole application. The plan instead separates **what a module is** from **what a bundle contains**.
 
 ### 4a. Classify special programs before clustering
