@@ -92,6 +92,8 @@ Also report names that collide (two files with the same member name).
 
 ### 2a. COBOL programs (Java, extends `cobol-ast-runner`)
 
+Detailed build plan: [STEP2_BUILD_PLAN.md](STEP2_BUILD_PLAN.md). Output schema: [FACTS_SCHEMA.md](FACTS_SCHEMA.md).
+
 Batch mode: one JVM, a thread pool, a timeout per file, and one JSON per program. Extracted with the ProLeap ASG:
 
 - **Identity:** program-id, source format, parse quality, syntax errors, LOC.
@@ -121,6 +123,8 @@ Batch mode: one JVM, a thread pool, a timeout per file, and one JSON per program
 
 ### 2b. Other artefacts (Python)
 
+Detailed build plan: [STEP3_BUILD_PLAN.md](STEP3_BUILD_PLAN.md). Output schema: [SCANNERS_SCHEMA.md](SCANNERS_SCHEMA.md).
+
 | Artefact | Facts |
 |---|---|
 | JCL / PROC | jobs, steps, `EXEC PGM=` / `EXEC proc`, PROC expansion with symbolic substitution; DD name to DSN; DISP (read / write / new); utilities (IDCAMS, SORT, IEBGENER, DFHCSDUP) and their control cards |
@@ -131,6 +135,8 @@ Batch mode: one JVM, a thread pool, a timeout per file, and one JSON per program
 | IMS PSB / DBD | databases and segments a program can access |
 
 ## Stage 3: Dependency graph
+
+Detailed build plan: [STEP4_BUILD_PLAN.md](STEP4_BUILD_PLAN.md). Output schema: [GRAPH_SCHEMA.md](GRAPH_SCHEMA.md).
 
 **Output:** `graph.json` (nodes and edges), plus `graph_report.md` and Mermaid diagrams.
 

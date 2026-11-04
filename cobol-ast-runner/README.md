@@ -83,3 +83,21 @@ paragraph @L21
 - `EXEC CICS`, `EXEC SQL` and `EXEC SQLIMS` blocks are kept as text and not parsed further. The summary lists them in full.
 - `EXEC SQL INCLUDE` members (DCLGEN, SQLCA) are not expanded by ProLeap, so host variables defined only in them show up as unresolved names.
 - A `CALL` with a variable target (for example `CALL WS-PGM-NAME`) is listed by variable name. Look up its `VALUE` in the data items to find the program.
+
+## Batch facts mode
+
+The same jar has a second main class, `local.cobol.facts.FactsRunner`. It parses many programs in one JVM and writes one raw facts file per program for the facts pipeline (pipeline step 2). Normally you do not call it yourself: `facts/run_facts.py` builds the list file, calls it, and restarts it if a program times out.
+
+```
+java -Xmx2g -cp target/cobol-ast-runner.jar local.cobol.facts.FactsRunner \
+     --list programs.tsv --out RAW_DIR \
+     [--copybooks DIR]... [--timeout-sec 300] [--verbose]
+```
+
+- `--list`: UTF-8 text file, one program per line, four tab-separated columns: `NAME`, absolute path, `FORMAT` (`FIXED`, `VARIABLE` or `TANDEM`), `CHARSET` (`UTF-8` or `ISO-8859-1`).
+- `--out`: output folder. For each program it writes `NAME.raw.json` (the parse tree facts) and `NAME.pp.cbl` (the preprocessed source, with `*> @@CPYENTER` / `*> @@CPYEXIT` marker lines around every expanded copybook, so line numbers can be mapped back to the real files).
+- `--copybooks`: copybook folder, may be repeated. Names are matched case-insensitively with the extensions found in these folders. A quoted name such as `COPY 'CSSTRPFY'` is also found without its extension.
+- A missing copybook does not stop the run. It is recorded in `missing_copybooks` of the raw file and replaced by a marker line.
+- A program whose `NAME.raw.json` already exists is skipped, so an interrupted run can simply be started again.
+
+Exit codes: `0` finished, `1` bad arguments, `4` a program exceeded `--timeout-sec` (it is recorded with status `timeout`; start the command again to continue with the next program).
